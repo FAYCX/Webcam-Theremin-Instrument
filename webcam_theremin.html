@@ -36,7 +36,7 @@
         font-family: 'Helvetica', sans-serif;
       }
 
-       #reminder {
+      #reminder {
         margin-bottom: 20px;
         font-size: 14px;
         color: #666;
@@ -52,7 +52,7 @@
     </style>
   </head>
   <body>
-    <div id="title">Webcam Hand Theremin Instrument</div>
+    <div id="title">Webcam Handpose Theremin Instrument</div>
     <div id="H2">by Fay Cai (<a href="https://www.faycai.com" target="_blank">www.faycai.com</a>)</div>
     <div id="reminder">Note: Please raise one of your hands to play the instrument</div>
     <div id="sketch-container"></div>
@@ -81,11 +81,10 @@
         video.size(width, height);
         video.hide();
 
-        handpose.detectStart(video, gotHands);
+        handpose.detect(video, gotHands);
 
-        osc = new p5.Oscillator();
         osc.start();
-        osc.amp(amp, 0.1);
+        osc.amp(0.1);
       }
 
       function gotHands(results) {
