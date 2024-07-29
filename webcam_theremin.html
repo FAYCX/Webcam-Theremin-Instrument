@@ -1,9 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ml5.js Handpose p5 Webcam Theremin</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.7.0/p5.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.10.2/addons/p5.sound.min.js"></script>
@@ -49,102 +48,28 @@
     </style>
   </head>
   <body>
-    <div id="title">Webcam Handpose Theremin Instrument</div>
+    <div id="title">Webcam Hand Theremin Instrument</div>
     <div id="H2">by Fay Cai (<a href="https://www.faycai.com" target="_blank">www.faycai.com</a>)</div>
     <div id="reminder">Note: Please raise one of your hands to play the instrument</div>
     <div id="sketch-container"></div>
     <script>
-      console.log("Script start"); // Debugging step 1
+      alert("Script is running"); // Initial debug step
 
-      let handpose;
       let video;
-      let hands = [];
-
-      let notes = [67, 66, 64, 62, 60, 59, 57, 55];
-      let letters = ["G", "A", "B", "C", "D", "E", "F#", "G"];
-
-      let osc;
-
-      function preload() {
-        console.log("Preload start"); // Debugging step 2
-        handpose = ml5.handpose();
-        console.log("Handpose loaded"); // Debugging step 3
-      }
 
       function setup() {
-        console.log("Setup start"); // Debugging step 4
+        alert("Setup is running"); // Debug step 2
         let canvas = createCanvas(640, 480);
         canvas.parent('sketch-container');
-        console.log("Canvas created"); // Debugging step 5
-
-        osc = new p5.Oscillator();
-
-        video = createCapture(VIDEO, videoReady);
+        video = createCapture(VIDEO);
         video.size(width, height);
         video.hide();
-        console.log("Video capture started"); // Debugging step 6
-
-        handpose.on('predict', gotHands);
-
-        osc.start();
-        osc.amp(0.1);
-        console.log("Oscillator started"); // Debugging step 7
-      }
-
-      function videoReady() {
-        console.log("Video is ready"); // Debugging step 8
-      }
-
-      function gotHands(results) {
-        console.log("Handpose predictions received"); // Debugging step 9
-        hands = results;
       }
 
       function draw() {
-        console.log("Draw start"); // Debugging step 10
-        translate(width, 0);
-        scale(-1, 1);
+        background(220);
         image(video, 0, 0, width, height);
-
-        for (let i = 0; i < hands.length; i++) {
-          let hand = hands[i];
-          for (let j = 0; j < hand.keypoints.length; j++) {
-            let keypoint = hand.keypoints[j];
-            fill(255, 0, 0);
-            noStroke();
-            circle(keypoint.x, keypoint.y, 10);
-
-            let n = floor(map(keypoint.x, 0, width, 0, 8));
-            osc.freq(midiToFreq(notes[n]));
-
-            let w = width / 8;
-
-            for (let i = 0; i < 8; i++) {
-              if (keypoint.x > i * w && keypoint.x < i * w + w) {
-                fill(100, 20);
-              } else {
-                noFill();
-              }
-
-              strokeWeight(1);
-              stroke(random(150, 200));
-              rect(i * w, 0, w, height);
-
-              fill(255);
-              strokeWeight(1);
-              textSize(30);
-
-              push();
-              translate(width, 0);
-              scale(-1, 1);
-              text(letters[i], i * w + 30, 80);
-              pop();
-            }
-          }
-        }
       }
-
-      console.log("Script end"); // Debugging step 11
     </script>
   </body>
 </html>
