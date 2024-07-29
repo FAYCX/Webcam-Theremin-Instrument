@@ -1,10 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>ml5.js Handpose p5 Webcam Theremin</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Webcam Hand Theremin Instrument</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.7.0/p5.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.10.2/addons/p5.sound.min.js"></script>
     <script src="https://unpkg.com/ml5@0.20.0-alpha.3/dist/ml5.js"></script>
@@ -27,19 +26,10 @@
         font-family: 'Helvetica', sans-serif;
         font-weight: bold;
       }
-      #H2 {
+      #startButton {
+        padding: 10px 20px;
+        font-size: 16px;
         margin-bottom: 20px;
-        font-size: 18px;
-        color: #333;
-        text-align: center;
-        font-family: 'Helvetica', sans-serif;
-      }
-      #reminder {
-        margin-bottom: 20px;
-        font-size: 14px;
-        color: #666;
-        text-align: center;
-        font-family: 'Helvetica', sans-serif;
       }
       #sketch-container {
         display: flex;
@@ -49,11 +39,12 @@
     </style>
   </head>
   <body>
-    <div id="title">Webcam Handpose Theremin Instrument</div>
-    <div id="H2">by Fay Cai (<a href="https://www.faycai.com" target="_blank">www.faycai.com</a>)</div>
-    <div id="reminder">Note: Please raise one of your hands to play the instrument</div>
+    <div id="title">Webcam Hand Theremin Instrument</div>
+    <button id="startButton">Start</button>
     <div id="sketch-container"></div>
     <script>
+      console.log("Script is running"); // Initial debug step
+
       let handpose;
       let video;
       let hands = [];
@@ -63,35 +54,50 @@
 
       let osc;
 
+      document.getElementById("startButton").addEventListener("click", function() {
+        console.log("Start button clicked"); // Debug step
+        userStartAudio(); // Ensure audio context is started
+        setup();
+        this.style.display = 'none'; // Hide the button after starting
+      });
+
       function preload() {
+        console.log("Preload start"); // Debugging step 2
         handpose = ml5.handpose();
+        console.log("Handpose loaded"); // Debugging step 3
       }
 
       function setup() {
+        console.log("Setup is running"); // Debug step 4
         let canvas = createCanvas(640, 480);
         canvas.parent('sketch-container');
+        console.log("Canvas created"); // Debugging step 5
 
         osc = new p5.Oscillator();
 
         video = createCapture(VIDEO, videoReady);
         video.size(width, height);
         video.hide();
-
-        handpose.on('predict', gotHands);
+        console.log("Video capture started"); // Debugging step 6
 
         osc.start();
         osc.amp(0.1);
+        console.log("Oscillator started"); // Debugging step 7
+
+        handpose.on("predict", gotHands);
       }
 
       function videoReady() {
-        console.log("Video is ready");
+        console.log("Video is ready"); // Debugging step 8
       }
 
       function gotHands(results) {
+        console.log("Handpose predictions received"); // Debugging step 9
         hands = results;
       }
 
       function draw() {
+        console.log("Draw start"); // Debugging step 10
         translate(width, 0);
         scale(-1, 1);
         image(video, 0, 0, width, height);
