@@ -27,7 +27,6 @@
         font-family: 'Helvetica', sans-serif;
         font-weight: bold;
       }
-
       #H2 {
         margin-bottom: 20px;
         font-size: 18px;
@@ -35,7 +34,6 @@
         text-align: center;
         font-family: 'Helvetica', sans-serif;
       }
-
       #reminder {
         margin-bottom: 20px;
         font-size: 14px;
@@ -43,7 +41,6 @@
         text-align: center;
         font-family: 'Helvetica', sans-serif;
       }
-
       #sketch-container {
         display: flex;
         align-items: center;
@@ -52,7 +49,7 @@
     </style>
   </head>
   <body>
-    <div id="title">Webcam Handpose Theremin Instrument</div>
+    <div id="title">Webcam Hand Theremin Instrument</div>
     <div id="H2">by Fay Cai (<a href="https://www.faycai.com" target="_blank">www.faycai.com</a>)</div>
     <div id="reminder">Note: Please raise one of your hands to play the instrument</div>
     <div id="sketch-container"></div>
@@ -65,7 +62,6 @@
       let letters = ["G", "A", "B", "C", "D", "E", "F#", "G"];
 
       let osc;
-      let amp;
 
       function preload() {
         handpose = ml5.handpose();
@@ -77,14 +73,18 @@
 
         osc = new p5.Oscillator();
 
-        video = createCapture(VIDEO);
+        video = createCapture(VIDEO, videoReady);
         video.size(width, height);
         video.hide();
 
-        handpose.detect(video, gotHands);
+        handpose.on('predict', gotHands);
 
         osc.start();
         osc.amp(0.1);
+      }
+
+      function videoReady() {
+        console.log("Video is ready");
       }
 
       function gotHands(results) {
